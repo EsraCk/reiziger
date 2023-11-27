@@ -1,0 +1,62 @@
+import datetime
+import csv
+import random
+from tkinter import *
+from tkinter import messagebox
+
+
+
+def Verstuur_Bericht():
+
+    if len(BerichtInput.get("1.0", "end-1c")) > 140:
+        messagebox.showerror("Error", "Bericht is te lang, maak je bericht iets korter!")
+        return
+
+    if NaamInput.get() == "":
+        Naam = "Anoniem"
+    else:
+        Naam = NaamInput.get()
+
+    stations = ["Amsterdam", "Almere", "Utrecht"]
+    station = random.choice(stations)
+
+    ###Datum###
+    datum = datetime.datetime.now()
+    geformateerde_datum = datum.strftime("%Y-%m-%d %H:%M:%S")
+
+    ###Schrijf de rij met data in het csv-bestand###
+    bestand = open('test.csv', 'a', newline='')
+    csv_bestand = csv.writer(bestand)
+    rij = [Naam, BerichtInput.get("1.0", "end-1c"), station, geformateerde_datum]
+    csv_bestand.writerow(rij)
+
+    messagebox.showinfo("Success", "Je bericht is in goede handen gevallen! Dankjewel voor het meedoen!")
+
+
+root = Tk()
+root.geometry("500x300")
+root.title("Esra's Twitterzuil")
+
+Welkom = Label(root, text="Welkom bij de NS Zuil!", font=100)
+Welkom.pack(pady=(20, 45))
+
+NaamLabel = Label(root, text = "Voer hier je naam in")
+NaamLabel.pack()
+
+NaamInput = Entry(root)
+NaamInput.pack(pady=(0, 25))
+
+BerichtLabel = Label(root, text = "Voer een bericht van maximaal 140 karakters in")
+BerichtLabel.pack()
+
+BerichtInput = Text(root, width=50, height=3)
+BerichtInput.pack()
+
+Verstuur = Button(root, text="Verstuur bericht", command= Verstuur_Bericht)
+Verstuur.pack(pady=20)
+
+
+
+
+root.mainloop()
+
